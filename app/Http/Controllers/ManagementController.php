@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Auth;
 
 class ManagementController extends Controller
 {
@@ -13,7 +14,14 @@ class ManagementController extends Controller
      */
     public function index()
     {
-        $users = User::all();
+        $currentUser = Auth::user();
+
+        if ($currentUser->id != 1) {
+            $users = \App\Models\User::where('id', '!=', 1)->get();
+        } else {
+            $users = \App\Models\User::all();
+        }
+    
         return view('admin.management', compact('users'));
     }
 
